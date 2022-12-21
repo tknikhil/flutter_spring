@@ -9,6 +9,6 @@ class DeleteEmployee extends StatefulWidget {
 class _DeleteEmployeeState extends State<DeleteEmployee> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold();
   }
 }
