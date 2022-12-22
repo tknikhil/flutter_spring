@@ -1,10 +1,38 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import '../model/EmployeeModel.dart';
 
 class RegisterEmployee extends StatefulWidget {
   const RegisterEmployee({Key? key}) : super(key: key);
 
   @override
   State<RegisterEmployee> createState() => _RegisterEmployeeState();
+}
+
+Future<EmployeeModel> registerEmployee(
+    String firstname, String lastname, BuildContext context) async {
+  var Url = "http://localhost:8080/addemployee";
+  var response = await http.post(Url,
+      headers: <String, String>{"Content-type": "application/json"},
+      body: jsonEncode(
+          <String, String>{"firstname": firstname, "lastname": lastname}));
+
+  String responseString = response.body;
+  if (response.statusCode == 200) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext dialogContext) {
+        return MyAlertDialog(title: 'Backend response', content: response.body);
+      },
+    );
+  }
+
+  throw Exception();
 }
 
 class _RegisterEmployeeState extends State<RegisterEmployee> {
@@ -61,10 +89,28 @@ class _RegisterEmployeeState extends State<RegisterEmployee> {
                           borderRadius: BorderRadius.circular(5.0))),
                 )),
             //RaisedButton is depricated
-            ElevatedButton(onPressed: () {}, child:const Text("Submit"))
+            ElevatedButton(onPressed: () {}, child: const Text("Submit"))
           ],
         ),
       ),
+    );
+  }
+}
+
+
+class MyAlertDialog extends StatelessWidget {
+  final String title;
+  final String content;
+  final List<Widget>actions;
+
+  const MyAlertDialog({Key? key,this.actions=const[], required this.content, required this.title}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return  AlertDialog(
+      title:  Text(title,style:  Theme.of(context).textTheme.titleMedium,),
+      actions: actions,
+      content: Text(content,style: Theme.of(context).textTheme.bodyMedium ,),
     );
   }
 }
