@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import '../model/EmployeeModel.dart';
 
 class RegisterEmployee extends StatefulWidget {
-  const RegisterEmployee({Key? key}) : super(key: key);
+  // const RegisterEmployee(String firstName, String lastName, BuildContext context, {Key? key}) : super(key: key);
 
   @override
   State<RegisterEmployee> createState() => _RegisterEmployeeState();
@@ -15,7 +15,7 @@ class RegisterEmployee extends StatefulWidget {
 
 Future<EmployeeModel> registerEmployee(
     String firstname, String lastname, BuildContext context) async {
-  var Url = "http://localhost:8080/addemployee";
+  var Url = "http://10.0.2.2:8080/addemployee";
   var response = await http.post(Url,
       headers: <String, String>{"Content-type": "application/json"},
       body: jsonEncode(
@@ -40,6 +40,8 @@ class _RegisterEmployeeState extends State<RegisterEmployee> {
 
   TextEditingController firstController = TextEditingController();
   TextEditingController secondController = TextEditingController();
+
+  late EmployeeModel employee;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +91,16 @@ class _RegisterEmployeeState extends State<RegisterEmployee> {
                           borderRadius: BorderRadius.circular(5.0))),
                 )),
             //RaisedButton is depricated
-            ElevatedButton(onPressed: () {}, child: const Text("Submit"))
+            ElevatedButton(child: Text('Submit'),
+    onPressed: () async {
+    String? firstName = firstController.text;
+    String? lastName = secondController.text;
+    EmployeeModel employees =
+    await registerEmployee(firstName, lastName, context);
+    firstController.text = '';
+    secondController.text = '';
+    setState(() {
+    employee = employees;});})
           ],
         ),
       ),

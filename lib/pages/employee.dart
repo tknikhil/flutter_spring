@@ -1,3 +1,4 @@
+import 'package:employee/pages/getEmployee.dart';
 import 'package:employee/pages/registerEmployee.dart';
 import 'package:flutter/material.dart';
 
@@ -34,12 +35,17 @@ class _EmployeeState extends State<Employee> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const RegisterEmployee()));
+                      builder: (context) =>  RegisterEmployee()));
             },
           ),
           ListTile(
             title: const Text("Get All Employee"),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const GetEmployee()));
+            },
           ),
         ],
       )),
